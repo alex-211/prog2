@@ -1,6 +1,8 @@
 /* INSERIRE QUI EVENTUALI ALTRI #include <...> */
 /* INSERT HERE MORE #include <...> IF NEEDED */
 #include <stdbool.h>
+#include <string.h>
+#include <math.h>
 /* INSERIRE QUI EVENTUALI FUNZIONI AUSILIARIE */
 /* INSERT HERE AUXILIARY FUNCTIONS IF NEEDED */
 
@@ -65,10 +67,80 @@
  */
 int stoib(char *s, unsigned short b, int *r) {
 
-    /* INSERIRE QUI IL CODICE */
-    /* INSERT YOUR CODE HERE */
+    int retVal = 0;
+    int sign = +1;
+    size_t sSize = strlen(s);
     
-    return 0;
+    // check base
+    if (b < 2 || b > 36) return 0;
+
+    // check for a null string
+    if (*s == NULL) return 0;
+    
+    // check when the string starts
+    int i = 0;
+    while (s[i] == ' ' && i <= sSize)
+    {
+        retVal++;
+        i++;
+    }
+    
+    // empty string means return value should be 0
+    if (i == sSize) return 0;
+    
+    // check sign
+    if (s[i] == '-')
+    {
+        sign = -1;
+        i++;
+        retVal++;
+    }
+    // since we assumed sign is positive, if we see "+" we just need to skip it in our for loop
+    else if (s[i] == '+') 
+    {
+        i++;
+        retVal++;
+    }
+    
+    for(int j = i; j < sSize; j++)
+    {
+        int currentValue = 0;
+        
+        // check for whitespace
+        // shouldn't count this whitespace so we just need a break 
+        if (s[j] == ' ')
+        {
+            break;
+        }
+        
+        // check if char is allowed in our base
+        // bases 2-10
+        if (b >= 2 && b <= 10)
+        {
+            if (!(s[j] >= '0' && s[j] < ('0' + b))) break;
+            else currentValue = s[j] - '0';
+        }
+            
+        // bases 11-36
+        else
+        {
+            if  (!( (s[j] >= '0' && s[j] < ('0' + 10)) || // check numbers
+                    (s[j] >= 'A' && s[j] < ('A' + b - 10)) || // check uppercase letters
+                    (s[j] >= 'a' && s[j] < ('a' + b - 10))) // check lowercase letters
+                ) break;
+            else 
+            {
+                if (s[j] >= '0' && s[j] < ('0' + 10)) currentValue = s[j] - '0';
+                if (s[j] >= 'A' && s[j] < ('A' + b - 10)) currentValue = s[j] - 'A' + 10;
+                if (s[j] >= 'a' && s[j] < ('a' + b - 10)) currentValue = s[j] - 'a' + 10;
+            }
+        }
+        
+        *r = *r * b + currentValue;
+        retVal++;
+    }
+    *r = *r * sign;
+    return retVal;
 }
 
 
