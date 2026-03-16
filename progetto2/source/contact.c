@@ -1,13 +1,26 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
-#include "contact.h"
+#include "../include/contact.h"
 
 /* INSERIRE QUI EVENTUALI ALTRI #include <...> */
 /* INSERT HERE MORE #include <...> IF NEEDED */
 
 /* INSERIRE QUI EVENTUALI FUNZIONI AUSILIARIE */
 /* INSERT HERE AUXILIARY FUNCTIONS IF NEEDED */
+
+// not sure i need this
+int smallerStr(char* s1, char* s2)
+{
+    int lenS1 = strlen(s1);
+    int lenS2 =  strlen(s2);
+    if (lenS1 >= lenS2)
+    {
+        return lenS2;
+    }
+    return lenS1;
+}
 
 /**
 
@@ -70,7 +83,26 @@ int test_contactEq() {
 // same as for contactEq
 int contactEqEff(const Contact *pc1, const Contact *pc2) {
 
-    return 0;
+    if (pc1 == NULL || pc2 == NULL) return -99;
+
+    // concatenate name + surname
+    char name1[] = strcat(pc1->name, pc1->surname);
+    char name2[] = strcat(pc2->name, pc2->surname); // strcat cant be used for declaration, need to fix this
+    int len = smallerStr(name1, name2);
+
+    // pretty much goes, if they are not the same lenght, they are deffo not equal
+    if (name1[len] == '\0' && name2[len] != '\0') return 0;
+    if (name1[len] != '\0' && name2[len] == '\0') return 0;
+
+    for (int i = 0; i < len; i++)
+    {
+        if (toupper(name1[i]) != toupper(name2[i]))
+        {
+            return 0;
+        }
+    }
+
+    return 1;
 
 }
 
@@ -78,8 +110,64 @@ int contactEqEff(const Contact *pc1, const Contact *pc2) {
 // same as for test_contactEq
 int test_contactEqEff() {
 
-    return 0;
+    Contact c1, c2;
+    Contact *pC1 = &c1;
+    Contact *pC2 = &c2;
 
+    // Caso nomi diversi
+    c1.name = "Giacomo";
+    c1.surname = "Testaquadra";
+    c2.name = "Jacob";
+    c2.surname = "Squared";
+    if (contactEqEff(pC1, pC2) != 0)
+    {
+        printf("TEST FAILED \n");
+        return 10;
+    } 
+
+    // caso nomi uguali
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "Giacomo";
+    c2.surname = "Squared";
+    if (contactEqEff(pC1, pC2) != 1)
+    {
+        printf("TEST FAILED \n");
+        return 10;
+    } 
+    printf("TEST PASSED");
+
+    // caso roba a caso
+    c1.name = "Giacomo";
+    // c1.name should be null?
+    c2.name = "Giacomo";
+    c2.surname = "Squared";
+    if (contactEqEff(pC1, pC2) != -99) // this test might fail
+    {
+        printf("TEST FAILED \n");
+        return 10;
+    } 
+
+    // caso nomi uguali ma uno maiusc
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "GIACOMO";
+    c2.surname = "SQUARED";
+    if (contactEqEff(pC1, pC2) != 1)
+    {
+        printf("TEST FAILED \n");
+        return 10;
+    } 
+
+    // caso gli passo null
+    if (contactEqEff(NULL, NULL) != -99)
+    {
+        printf("TEST FAILED \n");
+        return 10;
+    }
+
+    printf("TEST PASSED \n");
+    return 0;
 }
 
 // come per contactEq

@@ -138,8 +138,8 @@ int stoib(char *s, unsigned short b, int *r) {
         // bases 11-36
         else
         {
-            if  (!(s[j] >= '0' && s[j] < ('0' + 10)) || // check numbers
-                  (s[j] >= 'A' && s[j] < ('A' + b - 10)) // check letters (uppercase only)
+            if  (!(s[j] >= '0' && s[j] < ('0' + 10)) && // check numbers
+                 !(s[j] >= 'A' && s[j] < ('A' + b - 10)) // check letters (uppercase only)
                 ) 
             {
                 break;
