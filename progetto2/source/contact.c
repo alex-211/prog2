@@ -198,6 +198,69 @@ int contactCmpEff(const Contact *pc1, const Contact *pc2) {
 // same as for test_contactEq
 int test_contactCmpEff() {
 
+    Contact c1, c2;
+    Contact *pC1 = &c1;
+    Contact *pC2 = &c2;
+
+    // caso null
+    if (contactCmpEff(pc1, pc2) != -99)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso diversi c1 < c2
+    c1.surname = "Testaquadra";
+    c2.surname = "Squared";
+    if (contactCmpEff(pc1, pc2) != 2)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso diversi c2 < c1
+    c2.surname = "Testaquadra";
+    c1.surname = "Squared";
+    if (contactCmpEff(pc1, pc2) != 1)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso stesso cognome
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "Jacob";
+    c2.surname = "Squared";
+    if (contactCmpEff(pc1, pc2) != 1)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso uguali
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "Giacomo";
+    c2.surname = "Squared";
+    if (contactCmpEff(pc1, pc2) != 0)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso diversi ma uno maiusc
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "GIACOMO";
+    c2.surname = "SQUARED";
+    if (contactCmpEff(pc1, pc2) != 0)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    printf("TEST PASSED\n");
     return 0;
 
 }
