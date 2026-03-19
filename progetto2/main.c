@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../include/contact.h"
+#include "include/contact.h"
 
 int main()
 {
-    int cef = test_contactEqEff();
-    printf("test contactEqEff returned %d", cef);
+    test_contactEqEff();
+    //test_contactCmpEff();
     return 0;
 }

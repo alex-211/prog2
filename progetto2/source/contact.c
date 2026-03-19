@@ -86,11 +86,13 @@ int contactEqEff(const Contact *pc1, const Contact *pc2) {
     if (pc1 == NULL || pc2 == NULL) return -99;
 
     // concatenate name + surname
-    char name1[] = strcat(pc1->name, pc1->surname);
-    char name2[] = strcat(pc2->name, pc2->surname); //! strcat cant be used for declaration, need to fix this
+    char name1[] = "";
+    strcpy(name1, strcat(pc1->name, pc1->surname)); // this gets me a segmentation fault :((
+    char name2[] = "";
+    strcpy(name2, strcat(pc2->name, pc2->surname));
     int len = smallerStr(name1, name2);
 
-    // pretty much goes, if they are not the same lenght, they are deffo not equal
+    // pretty much goes, if they are not the same length, they are deffo not equal
     if (name1[len] == '\0' && name2[len] != '\0') return 0;
     if (name1[len] != '\0' && name2[len] == '\0') return 0;
 
@@ -193,22 +195,22 @@ int contactCmpEff(const Contact *pc1, const Contact *pc2) {
     if (pc1 == NULL || pc2 == NULL) return -99;
 
     int len;
-    char n1;
-    char n2;
+    char n1[] = "";
+    char n2[] = "";
 
     //! this doesn't work, it's case sensitive
     if (pc1->surname == pc2->surname) //? can we even compare strings like so?
     {
-        n1 = pc1->name;
-        n2 = pc2->name;
+        strcpy(n1, pc1->name);
+        strcpy(n2, pc2->name);
     }
     else 
     {
-        n1 = pc1->surname;
-        n2 = pc2->surname;
+        strcpy(n1, pc1->surname);
+        strcpy(n1, pc2->surname);
     }
 
-    int len = smallerStr(n1, n2);
+    len = smallerStr(n1, n2);
 
     for (int i = 0; i < len; i++)
     {

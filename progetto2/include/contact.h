@@ -41,4 +41,7 @@ int contactCmp(Contact c1, Contact c2);
 */
 int contactCmpEff(const Contact * const pc1, const Contact * const pc2);
 
+// prototipi di funzioni test
+int test_contactEqEff();
+int test_contactCmpEff();
 #endif
