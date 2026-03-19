@@ -87,7 +87,7 @@ int contactEqEff(const Contact *pc1, const Contact *pc2) {
 
     // concatenate name + surname
     char name1[] = strcat(pc1->name, pc1->surname);
-    char name2[] = strcat(pc2->name, pc2->surname); // strcat cant be used for declaration, need to fix this
+    char name2[] = strcat(pc2->name, pc2->surname); //! strcat cant be used for declaration, need to fix this
     int len = smallerStr(name1, name2);
 
     // pretty much goes, if they are not the same lenght, they are deffo not equal
@@ -122,7 +122,7 @@ int test_contactEqEff() {
     if (contactEqEff(pC1, pC2) != 0)
     {
         printf("TEST FAILED \n");
-        return 10;
+        return 0;
     } 
 
     // caso nomi uguali
@@ -133,7 +133,7 @@ int test_contactEqEff() {
     if (contactEqEff(pC1, pC2) != 1)
     {
         printf("TEST FAILED \n");
-        return 10;
+        return 0;
     } 
     printf("TEST PASSED");
 
@@ -142,10 +142,10 @@ int test_contactEqEff() {
     // c1.name should be null?
     c2.name = "Giacomo";
     c2.surname = "Squared";
-    if (contactEqEff(pC1, pC2) != -99) // this test might fail
+    if (contactEqEff(pC1, pC2) != -99) //* this test might fail
     {
         printf("TEST FAILED \n");
-        return 10;
+        return 0;
     } 
 
     // caso nomi uguali ma uno maiusc
@@ -156,14 +156,14 @@ int test_contactEqEff() {
     if (contactEqEff(pC1, pC2) != 1)
     {
         printf("TEST FAILED \n");
-        return 10;
+        return 0;
     } 
 
     // caso gli passo null
     if (contactEqEff(NULL, NULL) != -99)
     {
         printf("TEST FAILED \n");
-        return 10;
+        return 0;
     }
 
     printf("TEST PASSED \n");
@@ -190,6 +190,39 @@ int test_contactCmp() {
 // same as for test_contactEq
 int contactCmpEff(const Contact *pc1, const Contact *pc2) {
 
+    if (pc1 == NULL || pc2 == NULL) return -99;
+
+    int len;
+    char n1;
+    char n2;
+
+    //! this doesn't work, it's case sensitive
+    if (pc1->surname == pc2->surname) //? can we even compare strings like so?
+    {
+        n1 = pc1->name;
+        n2 = pc2->name;
+    }
+    else 
+    {
+        n1 = pc1->surname;
+        n2 = pc2->surname;
+    }
+
+    int len = smallerStr(n1, n2);
+
+    for (int i = 0; i < len; i++)
+    {
+        if (n1[i] > n2[i])
+        {
+            return 1;
+        }
+        else if (n1[i] < n2[i]) 
+        {
+            return -1;
+        }
+
+    }
+
     return 0;
 
 }
@@ -199,11 +232,11 @@ int contactCmpEff(const Contact *pc1, const Contact *pc2) {
 int test_contactCmpEff() {
 
     Contact c1, c2;
-    Contact *pC1 = &c1;
-    Contact *pC2 = &c2;
+    Contact *pc1 = &c1;
+    Contact *pc2 = &c2;
 
     // caso null
-    if (contactCmpEff(pc1, pc2) != -99)
+    if (contactCmpEff(NULL, NULL) != -99)
     {
         printf("TEST FAILED\n");
         return 0;
