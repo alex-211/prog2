@@ -83,13 +83,21 @@ int test_contactEq() {
 // same as for contactEq
 int contactEqEff(const Contact *pc1, const Contact *pc2) {
 
+    // check for null pointers
     if (pc1 == NULL || pc2 == NULL) return -99;
 
+    // check for empty strings
+    if (strcmp(pc1->surname, "") != 0 || strcmp(pc1->name, "") == 0 ||
+        strcmp(pc2->surname, "") != 0 || strcmp(pc2->name, "") == 0) return -99; // giving problems here debug
+
     // concatenate name + surname
-    char name1[] = "";
-    strcpy(name1, strcat(pc1->name, pc1->surname)); // this gets me a segmentation fault :((
-    char name2[] = "";
-    strcpy(name2, strcat(pc2->name, pc2->surname));
+    char name1[100];
+    // strcpy(name1, strcat(pc1->name, pc1->surname)); // buffer overflow, didnt know how strcat works
+    // it's like a printf except the output gets copied into a string, it's f ing nuts
+    snprintf(name1, sizeof(name1), "%s%s", pc1->name, pc1->surname);
+    char name2[100];
+    snprintf(name2, sizeof(name2), "%s%s", pc2->name, pc2->surname);
+    // strcpy(name2, strcat(pc2->name, pc2->surname));
     int len = smallerStr(name1, name2);
 
     // pretty much goes, if they are not the same length, they are deffo not equal
@@ -116,6 +124,17 @@ int test_contactEqEff() {
     Contact *pC1 = &c1;
     Contact *pC2 = &c2;
 
+    // caso roba a caso
+    c1.name = "Giacomo";
+    // c1.name should be null?
+    c2.name = "Giacomo";
+    c2.surname = "Squared";
+    if (contactEqEff(pC1, pC2) != -99)
+    {
+        printf("TEST FAILED 1 \n");
+        return 0;
+    }
+
     // Caso nomi diversi
     c1.name = "Giacomo";
     c1.surname = "Testaquadra";
@@ -123,7 +142,7 @@ int test_contactEqEff() {
     c2.surname = "Squared";
     if (contactEqEff(pC1, pC2) != 0)
     {
-        printf("TEST FAILED \n");
+        printf("TEST FAILED 2 \n");
         return 0;
     } 
 
@@ -134,21 +153,9 @@ int test_contactEqEff() {
     c2.surname = "Squared";
     if (contactEqEff(pC1, pC2) != 1)
     {
-        printf("TEST FAILED \n");
+        printf("TEST FAILED 3 \n");
         return 0;
-    } 
-    printf("TEST PASSED");
-
-    // caso roba a caso
-    c1.name = "Giacomo";
-    // c1.name should be null?
-    c2.name = "Giacomo";
-    c2.surname = "Squared";
-    if (contactEqEff(pC1, pC2) != -99) //* this test might fail
-    {
-        printf("TEST FAILED \n");
-        return 0;
-    } 
+    }
 
     // caso nomi uguali ma uno maiusc
     c1.name = "Giacomo";
@@ -157,14 +164,14 @@ int test_contactEqEff() {
     c2.surname = "SQUARED";
     if (contactEqEff(pC1, pC2) != 1)
     {
-        printf("TEST FAILED \n");
+        printf("TEST FAILED 4 \n");
         return 0;
     } 
 
     // caso gli passo null
     if (contactEqEff(NULL, NULL) != -99)
     {
-        printf("TEST FAILED \n");
+        printf("TEST FAILED 5 \n");
         return 0;
     }
 
@@ -247,7 +254,7 @@ int test_contactCmpEff() {
     // caso diversi c1 < c2
     c1.surname = "Testaquadra";
     c2.surname = "Squared";
-    if (contactCmpEff(pc1, pc2) != 2)
+    if (contactCmpEff(pc1, pc2) != 1)
     {
         printf("TEST FAILED\n");
         return 0;
@@ -256,7 +263,7 @@ int test_contactCmpEff() {
     // caso diversi c2 < c1
     c2.surname = "Testaquadra";
     c1.surname = "Squared";
-    if (contactCmpEff(pc1, pc2) != 1)
+    if (contactCmpEff(pc1, pc2) != 2)
     {
         printf("TEST FAILED\n");
         return 0;
