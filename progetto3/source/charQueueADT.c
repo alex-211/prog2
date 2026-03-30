@@ -21,13 +21,20 @@ CharQueueADT mkQueue() // fct 0
 
 void dsQueue(CharQueueADT *pq) // fct 1
 {
-    free(pq); // getting an invalid pointer here
-    pq = NULL;
+    if (*pq == NULL) return;
+    free((*pq)->a); // why this syntax?? why??!!?
+    free(*pq);
+    *pq = NULL; // perché dereferenziare un puntatore? perché abbiamo un puntatore a puntatore
 }
 
 bool enqueue(CharQueueADT q, const char e) // fct 2
 {
-
+    if (q == NULL) return false;
+    if (q->size == q->capacity) return false;
+    if (e == '\0') return false;
+    q->rear++;
+    q->a[q->rear] = e;
+    return true;
 }
 
 bool dequeue(CharQueueADT q, char*res) // fct 3

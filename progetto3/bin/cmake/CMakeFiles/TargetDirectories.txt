@@ -1,0 +1,3 @@
+/home/alex/Code/prog2/prog2/progetto3/bin/cmake/CMakeFiles/progetto3.dir
+/home/alex/Code/prog2/prog2/progetto3/bin/cmake/CMakeFiles/edit_cache.dir
+/home/alex/Code/prog2/prog2/progetto3/bin/cmake/CMakeFiles/rebuild_cache.dir

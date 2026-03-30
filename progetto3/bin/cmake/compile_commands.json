@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/alex/Code/prog2/prog2/progetto3/bin/cmake",
+  "command": "/usr/bin/cc -I/home/alex/Code/prog2/prog2/progetto3/include -g -std=gnu11 -fdiagnostics-color=always -o CMakeFiles/progetto3.dir/source/charQueueADT.c.o -c /home/alex/Code/prog2/prog2/progetto3/source/charQueueADT.c",
+  "file": "/home/alex/Code/prog2/prog2/progetto3/source/charQueueADT.c",
+  "output": "/home/alex/Code/prog2/prog2/progetto3/bin/cmake/CMakeFiles/progetto3.dir/source/charQueueADT.c.o"
+},
+{
+  "directory": "/home/alex/Code/prog2/prog2/progetto3/bin/cmake",
+  "command": "/usr/bin/cc -I/home/alex/Code/prog2/prog2/progetto3/include -g -std=gnu11 -fdiagnostics-color=always -o CMakeFiles/progetto3.dir/source/main.c.o -c /home/alex/Code/prog2/prog2/progetto3/source/main.c",
+  "file": "/home/alex/Code/prog2/prog2/progetto3/source/main.c",
+  "output": "/home/alex/Code/prog2/prog2/progetto3/bin/cmake/CMakeFiles/progetto3.dir/source/main.c.o"
+}
+]
