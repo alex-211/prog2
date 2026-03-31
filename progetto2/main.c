@@ -6,7 +6,7 @@
 int main()
 {
     test_contactEqEff();
-    //test_contactCmpEff();
+    test_contactCmpEff();
 
     return 0;
 }

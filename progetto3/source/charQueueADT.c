@@ -39,17 +39,26 @@ bool enqueue(CharQueueADT q, const char e) // fct 2
 
 bool dequeue(CharQueueADT q, char*res) // fct 3
 {
-
+    if (q == NULL || res == NULL) return false;
+    if (q->size == 0) return false;
+    *res = q->a[q->front];
+    q->a[q->front] = '\0';
+    q->front++;
+    q->size--;
+    return true;
 }
 
 bool isEmpty(CharQueueADT q) // fct 4
 {
-
+    if (q == NULL) return false;
+    if (q->size == 0) return true;
+    return false;
 }
 
 int size(CharQueueADT q) // fct 5
 {
-
+    if (q == NULL) return 0;
+    return q->size;
 }
 
 bool peek(CharQueueADT q, int position, char* res) // fct 6

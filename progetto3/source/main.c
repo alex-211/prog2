@@ -74,8 +74,75 @@ void tests(int fct)
         if (enqueue(pQ, 'a') != false) printf("test 2.4 failed\n");
         else printf("test 2.4 passed\n");
 
+        dsQueue(&pQ);
+
     }
 
+    if (fct == 3)
+    {
+        printf("testing function 3 dequeue\n");
+        CharQueueADT pQ = mkQueue();
+        char res;
+
+        // test 3.1 NULL ptrs
+        if (dequeue(NULL, NULL) != false) printf("test 3.1 failed\n");
+        else printf("test 3.1 passed\n");
+
+        // test 3.2 empty que
+        if (dequeue(pQ, &res) != false) printf("test 3.2 failed");
+        else printf("test 3.2 passed\n");
+
+        // test 3.3 just works
+        pQ->a[pQ->rear] = 'a';
+        pQ->size++;
+
+        pQ->rear++;
+        pQ->a[pQ->rear] = 'b';
+        pQ->size++;
+
+        pQ->rear++;
+        pQ->a[pQ->rear] = 'c';
+        pQ->size++;
+        if (dequeue(pQ, &res) != true || pQ->a[pQ->front] != 'b' || pQ->size != 2 || pQ->front != 1 || pQ->rear != 2 || res != 'a')
+        {
+            printf("test 3.3 failed:\n");
+            printf("exp pQ->a[pQ->front] = b, got %c | exp pQ->size = 2, got %d | exp pQ->front = 1, got %d | exp pQ->rear = 2, got %d | exp res = a, got %c", pQ->a[pQ->front], pQ->size, pQ->front, pQ->rear, res);
+        }
+        else printf("test 3.3 passed\n");
+
+        dsQueue(&pQ);
+    }
+
+    if (fct == 4) // function 4 isEmpty
+    {
+        printf("testing function 4 isEmpty\n");
+        CharQueueADT pQ = mkQueue();
+
+        // 4.1 null ptr
+        if (isEmpty(NULL) != false) printf("test 4.1 failed\n");
+        else printf("test 4.1 passed\n");
+
+        // 4.2 actually empty struct
+        if (isEmpty(pQ) != true) printf("test 4.2 failed\n");
+        else printf("test 4.2 passed\n");
+
+        // 4.3 non-empty struct
+        pQ->size++;
+        if (isEmpty(pQ) != false) printf("test 4.3 failed\n");
+        else printf("test 4.3 passed\n");
+
+        dsQueue(&pQ);
+    }
+
+    if (fct == 5)
+    {
+        printf("WTAF dude not even gonna check function 5\n");
+    }
+
+    if (fct == 6)
+    {
+
+    }
 }
 
 int main()
@@ -83,5 +150,9 @@ int main()
     tests(0);
     tests(1);
     tests(2);
+    tests(3);
+    tests(4);
+    tests(5);
+    tests(6);
     return 0;
 }
