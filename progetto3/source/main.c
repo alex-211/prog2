@@ -78,7 +78,7 @@ void tests(int fct)
 
     }
 
-    if (fct == 3)
+    if (fct == 3) // dequeue
     {
         printf("testing function 3 dequeue\n");
         CharQueueADT pQ = mkQueue();
@@ -136,12 +136,42 @@ void tests(int fct)
 
     if (fct == 5)
     {
-        printf("WTAF dude not even gonna check function 5\n");
+        printf("Not checking function 5 yet\n");
     }
 
-    if (fct == 6)
+    if (fct == 6) // peek
     {
+        printf("Testing function 6 peek\n");
+        CharQueueADT pQ = mkQueue();
+        char res;
 
+        pQ->a[pQ->rear] = 'a';
+        pQ->size++;
+
+        pQ->rear++;
+        pQ->a[pQ->rear] = 'b';
+        pQ->size++;
+
+        // 6.1 null pointer
+        if (peek(NULL, 10, NULL) != 0) printf("test 6.1 failed\n");
+        else printf("test 6.1 passed\n");
+
+        // 6.2 position out of bounds
+        if (peek(pQ, 100, &res) != 0) printf("test 6.2 failed\n");
+        else printf("test 6.2 passed\n");
+
+        // 6.3 invalid position neg
+        if (peek(pQ, -1, &res) != 0) printf("test 6.3 failed\n");
+        else printf("test 6.3 passed\n");
+
+        // just works
+        if (peek(pQ, 1, &res) != 1 || res != 'b')
+        {
+            printf("test 6.4 failed\n");
+            printf("exp res = b, got %c", res);
+        }
+        else printf("test 6.4 passed\n");
+        dsQueue(&pQ);
     }
 }
 

@@ -63,5 +63,9 @@ int size(CharQueueADT q) // fct 5
 
 bool peek(CharQueueADT q, int position, char* res) // fct 6
 {
+    if (q == NULL || res == NULL) return false;
+    if (position > q->rear || position < q->front) return false;
 
+    *res = q->a[position];
+    return true;
 }
