@@ -29,6 +29,9 @@ void dsQueue(CharQueueADT *pq) // fct 1
 
 bool enqueue(CharQueueADT q, const char e) // fct 2
 {
+    // this fails teacher's test, dont know why
+    // collegue suggests:
+    // 👀ricorda che e un Array circolare( cose tanto brutte negli indici quando fai resize)
     if (q == NULL) return false;
     if (q->size == q->capacity) return false;
     if (e == '\0') return false;
