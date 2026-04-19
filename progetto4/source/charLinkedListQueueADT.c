@@ -23,6 +23,9 @@ CharQueueADT mkQueue()
 
 void dsQueue(CharQueueADT *pq)
 {
+    (*pq)->size = 0;
+    (*pq)->front = NULL;
+    (*pq)->rear = NULL;
     free(*pq);
     *pq = NULL;
 }
@@ -53,5 +56,32 @@ _Bool dequeue(CharQueueADT q, char*res)
     *res = q->front->data;
     q->front = q->front->next;
     q->size--;
+    return true;
+}
+
+_Bool isEmpty(CharQueueADT q)
+{
+    if (q == NULL) return false;
+    if (q->size <= 0) return true;
+    return false;
+}
+
+int size(CharQueueADT q)
+{
+    if (q == NULL) return -1;
+    else return q->size;
+}
+
+_Bool peek(CharQueueADT q, int position, char* res)
+{
+    if (q == NULL || res == NULL) return false;
+    if (position < 0 || position >= q->size) return false;
+    if (q->size == 0) return false;
+
+    ListNodePtr addr = q->front;
+
+    for (int i = 0; i < position; i++) addr = addr->next;
+
+    *res = addr->data;
     return true;
 }

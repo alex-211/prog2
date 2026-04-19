@@ -19,7 +19,7 @@ echo "---------------------------------------------"
 echo "| Build complete! output: bin/progetto4.out |"
 echo "---------------------------------------------"
 echo " "
-echo "Running bin/progetto4.out"
+echo "| Running bin/progetto4.out |"
 echo " "
 
 ./bin/progetto4.out
