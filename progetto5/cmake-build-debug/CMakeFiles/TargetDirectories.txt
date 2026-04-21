@@ -1,0 +1,3 @@
+/home/alex/Code/prog2/prog2/progetto5/cmake-build-debug/CMakeFiles/progetto5.dir
+/home/alex/Code/prog2/prog2/progetto5/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/alex/Code/prog2/prog2/progetto5/cmake-build-debug/CMakeFiles/rebuild_cache.dir
