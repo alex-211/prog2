@@ -75,7 +75,65 @@ int contactEq(Contact c1, Contact c2) {
 
 int test_contactEq() {
 
-    return 0; 
+    Contact c1, c2;
+
+    // caso empty string
+    c1.name = "\0";
+    c1.surname = "\0";
+    c2.name = "\0";
+    c2.surname = "\0";
+    if (contactEq(c1, c2) != -99)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso roba a caso
+    c1.name = "Giacomo";
+    // c1.name should be null?
+    c2.name = "Giacomo";
+    c2.surname = "Squared";
+    if (contactEq(c1, c2) != -99)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // Caso nomi diversi
+    c1.name = "Giacomo";
+    c1.surname = "Testaquadra";
+    c2.name = "Jacob";
+    c2.surname = "Squared";
+    if (contactEq(c1, c2) != 0)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    } 
+
+    // caso nomi uguali
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "Giacomo";
+    c2.surname = "Squared";
+    if (contactEq(c1, c2) != 1)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso nomi uguali ma uno maiusc
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "GIACOMO";
+    c2.surname = "SQUARED";
+    if (contactEq(c1, c2) != 1)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    } 
+
+    printf("TEST PASSED\n");
+    return 0;
 
 }
 
@@ -87,8 +145,8 @@ int contactEqEff(const Contact *pc1, const Contact *pc2) {
     if (pc1 == NULL || pc2 == NULL) return -99;
 
     // check for empty strings
-    if (strcmp(pc1->surname, "") != 0 || strcmp(pc1->name, "") == 0 ||
-        strcmp(pc2->surname, "") != 0 || strcmp(pc2->name, "") == 0) return -99; // giving problems here debug
+    if (strcmp(pc1->surname, "\0") != 0 || strcmp(pc1->name, "\0") == 0 ||
+        strcmp(pc2->surname, "\0") != 0 || strcmp(pc2->name, "\0") == 0) return -99; // giving problems here debug
 
     // concatenate name + surname
     char name1[100];
@@ -131,7 +189,7 @@ int test_contactEqEff() {
     c2.surname = "Squared";
     if (contactEqEff(pC1, pC2) != -99)
     {
-        printf("TEST FAILED 1 \n");
+        printf("TEST FAILED");
         return 0;
     }
 
@@ -142,7 +200,7 @@ int test_contactEqEff() {
     c2.surname = "Squared";
     if (contactEqEff(pC1, pC2) != 0)
     {
-        printf("TEST FAILED 2 \n");
+        printf("TEST FAILED");
         return 0;
     } 
 
@@ -153,7 +211,7 @@ int test_contactEqEff() {
     c2.surname = "Squared";
     if (contactEqEff(pC1, pC2) != 1)
     {
-        printf("TEST FAILED 3 \n");
+        printf("TEST FAILED");
         return 0;
     }
 
@@ -164,18 +222,18 @@ int test_contactEqEff() {
     c2.surname = "SQUARED";
     if (contactEqEff(pC1, pC2) != 1)
     {
-        printf("TEST FAILED 4 \n");
+        printf("TEST FAILED");
         return 0;
     } 
 
     // caso gli passo null
     if (contactEqEff(NULL, NULL) != -99)
     {
-        printf("TEST FAILED 5 \n");
+        printf("TEST FAILED");
         return 0;
     }
 
-    printf("TEST PASSED \n");
+    printf("TEST PASSED");
     return 0;
 }
 

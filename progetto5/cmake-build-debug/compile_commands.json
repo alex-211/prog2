@@ -1,6 +1,12 @@
 [
 {
   "directory": "/home/alex/Code/prog2/prog2/progetto5/cmake-build-debug",
+  "command": "/usr/bin/cc -I/home/alex/Code/prog2/prog2/progetto5/include -g -std=gnu11 -fdiagnostics-color=always -o CMakeFiles/progetto5.dir/src/intLinkedListSortedSetADT.c.o -c /home/alex/Code/prog2/prog2/progetto5/src/intLinkedListSortedSetADT.c",
+  "file": "/home/alex/Code/prog2/prog2/progetto5/src/intLinkedListSortedSetADT.c",
+  "output": "/home/alex/Code/prog2/prog2/progetto5/cmake-build-debug/CMakeFiles/progetto5.dir/src/intLinkedListSortedSetADT.c.o"
+},
+{
+  "directory": "/home/alex/Code/prog2/prog2/progetto5/cmake-build-debug",
   "command": "/usr/bin/cc -I/home/alex/Code/prog2/prog2/progetto5/include -g -std=gnu11 -fdiagnostics-color=always -o CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o -c /home/alex/Code/prog2/prog2/progetto5/src/test_intLinkedListSortedSetADT.c",
   "file": "/home/alex/Code/prog2/prog2/progetto5/src/test_intLinkedListSortedSetADT.c",
   "output": "/home/alex/Code/prog2/prog2/progetto5/cmake-build-debug/CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o"

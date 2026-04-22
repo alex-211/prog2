@@ -49,6 +49,14 @@ cmake_ninja_workdir = /home/alex/Code/prog2/prog2/progetto5/cmake-build-debug/
 
 build cmake_object_order_depends_target_progetto5: phony || .
 
+build CMakeFiles/progetto5.dir/src/intLinkedListSortedSetADT.c.o: C_COMPILER__progetto5_unscanned_Debug /home/alex/Code/prog2/prog2/progetto5/src/intLinkedListSortedSetADT.c || cmake_object_order_depends_target_progetto5
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/progetto5.dir/src/intLinkedListSortedSetADT.c.o.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  INCLUDES = -I/home/alex/Code/prog2/prog2/progetto5/include
+  OBJECT_DIR = CMakeFiles/progetto5.dir
+  OBJECT_FILE_DIR = CMakeFiles/progetto5.dir/src
+
 build CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o: C_COMPILER__progetto5_unscanned_Debug /home/alex/Code/prog2/prog2/progetto5/src/test_intLinkedListSortedSetADT.c || cmake_object_order_depends_target_progetto5
   CONFIG = Debug
   DEP_FILE = CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o.d
@@ -65,7 +73,7 @@ build CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o: C_COMPILE
 #############################################
 # Link the executable progetto5
 
-build progetto5: C_EXECUTABLE_LINKER__progetto5_Debug CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o
+build progetto5: C_EXECUTABLE_LINKER__progetto5_Debug CMakeFiles/progetto5.dir/src/intLinkedListSortedSetADT.c.o CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o
   CONFIG = Debug
   DEP_FILE = CMakeFiles/progetto5.dir/link.d
   FLAGS = -g
