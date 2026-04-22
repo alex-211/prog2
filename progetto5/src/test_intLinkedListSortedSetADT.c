@@ -88,11 +88,10 @@ int check_dsSSet() {
 
 int check_sset_add() {
     int passed=1;
-
+    IntSortedSetADT sptr = mkSSet();
     if (passed)
     {
         bool rv;
-        IntSortedSetADT sptr = mkSSet();
         printf("sset_add(NULL, 0)\n");
         rv = sset_add(NULL, 0);
         if (rv) 
@@ -111,10 +110,10 @@ int check_sset_add() {
     if (passed)
     {
         bool rv;
-        IntSortedSetADT sptr = mkSSet();
+        //IntSortedSetADT sptr = mkSSet();
         printf("sset_add(sptr, 1)\n");
         rv = sset_add(sptr, 1);
-        if (rv || sptr->first != NULL || sptr->last != NULL || sptr->size != 1)
+        if (rv && sptr->first != NULL && sptr->last != NULL && sptr->size == 1 && sptr->first == sptr->last)
         {
             printf("FAILED\n");
             printf("EXPECTED: true, NOT NULL, NOT NULL, 1\n\n");
@@ -130,10 +129,10 @@ int check_sset_add() {
     if (passed)
     {
         bool rv;
-        IntSortedSetADT sptr = mkSSet();
-        printf("sset_add(sptr, 2)\n");
-        rv = sset_add(sptr, 1);
-        if (rv || sptr->first != NULL || sptr->last != NULL || sptr->size != 2)
+        //IntSortedSetADT sptr = mkSSet();
+        printf("sset_add(sptr, 3)\n");
+        rv = sset_add(sptr, 3);
+        if (rv && sptr->first != NULL && sptr->last != NULL && sptr->size == 2)
         {
             printf("FAILED\n");
             printf("EXPECTED: true, NOT NULL, NOT NULL, 2\n\n");
@@ -145,6 +144,27 @@ int check_sset_add() {
         }
         printf("RESULT:%d %d %d %d\n\n", rv, sptr->first, sptr->last, sptr->size);
     }
+
+    if (passed)
+    {
+        bool rv;
+        IntSortedSetADT sptr = mkSSet();
+        printf("sset_add(sptr, 2)\n");
+        rv = sset_add(sptr, 2);
+        if (rv && sptr->first->next->elem == 2 && sptr->size == 3)
+        {
+            printf("FAILED\n");
+            printf("EXPECTED: true, NOT NULL, NOT NULL, 2\n\n");
+            passed=0;   
+        } 
+        else 
+        {
+            printf("OK\n");
+        }
+        printf("RESULT:%d %d %d %d\n\n", rv, sptr->first, sptr->last, sptr->size);
+    }
+
+    // aggiungere anche test per n < ss.first e per negativo 
 
     return passed;
 }
