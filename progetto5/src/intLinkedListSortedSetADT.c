@@ -34,13 +34,14 @@ _Bool dsSSet(IntSortedSetADT *ssptr)
 _Bool sset_add(IntSortedSetADT ss, const int elem) 
 {
     if (ss == NULL) return false;
-    ListNodePtr newNode = malloc(sizeof(ListNodePtr));
+    ListNodePtr newNode = malloc(sizeof(struct listNode));
     if (newNode == NULL)
     {
         printf("sset_add failed to create a new node\n");
         return false;
     }
-    if (ss->size = 0)
+    newNode->next = NULL;
+    if (ss->size == 0)
     {
         newNode->elem = elem;
         ss->first = newNode;
@@ -48,17 +49,16 @@ _Bool sset_add(IntSortedSetADT ss, const int elem)
         ss->size++;
         return true;
     }
-    if (elem == ss->first->elem) return false;
+    if (elem == ss->first->elem) { free(newNode); return false; }
     if (elem < ss->first->elem)
     {
         newNode->elem = elem;
-        newNode->next = ss->first->next;
-        ss->first->next = newNode;
+        newNode->next = ss->first;
         ss->first = newNode;
         ss->size++;
         return true;
     }
-    if (elem == ss->last->elem) return false;
+    if (elem == ss->last->elem) { free(newNode); return false; }
     if (elem > ss->last->elem)
     {
         newNode->elem = elem;
@@ -70,7 +70,7 @@ _Bool sset_add(IntSortedSetADT ss, const int elem)
     ListNodePtr node = ss->first;
     for (int i = 0; i < ss->size; i++)
     {
-        if (node->elem == elem) return false;
+        if (node->elem == elem) { free(newNode); return false; }
         if (node->elem < elem && elem < node->next->elem)
         {
             newNode->elem = elem;
@@ -81,6 +81,7 @@ _Bool sset_add(IntSortedSetADT ss, const int elem)
         }
         node = node->next;
     }
+    free(newNode);
     return false;
 }
 
@@ -140,7 +141,7 @@ _Bool sset_member(const IntSortedSetADT ss, const int elem)
     if (ss->first->elem == elem) return true;
     if (ss->last->elem == elem) return true;
     ListNodePtr node = ss->first;
-    for (int i = 0; i < ss->size; i++);
+    for (int i = 0; i < ss->size; i++)
     {
         if (node->elem == elem) return true;
     }
@@ -162,7 +163,7 @@ int sset_size(const IntSortedSetADT ss)
 
 _Bool sset_extract(IntSortedSetADT ss, int *ptr) 
 {
-    if (ss == NULL || *ptr == NULL) return false;
+    if (ss == NULL || ptr == NULL) return false;
     if (isEmptySSet(ss)) return false;
     int randomNum = rand() % ss->size;
     ListNodePtr deadNode = ss->first;
@@ -172,17 +173,13 @@ _Bool sset_extract(IntSortedSetADT ss, int *ptr)
     }
     *ptr = deadNode->elem;
     sset_remove(ss, deadNode->elem);
+    return true;
 }
 
 _Bool sset_equals(const IntSortedSetADT s1, const IntSortedSetADT s2) 
 {
     if (s1 == NULL || s2 == NULL) return false;
     if (s1->size != s2->size) return false;
-    if (s1->size == 1)
-    {
-        if (s1->first == s2->first) return true;
-        else return false;
-    }
     ListNodePtr nodeS1 = s1->first;
     ListNodePtr nodeS2 = s2->first;
     for (int i = 0; i < s1->size; i++)
@@ -197,7 +194,9 @@ _Bool sset_equals(const IntSortedSetADT s1, const IntSortedSetADT s2)
 _Bool sset_subseteq(const IntSortedSetADT s1, const IntSortedSetADT s2) 
 {
     if (s1 == NULL || s2 == NULL) return false;
-    if (s1->size == 0 || s2->size == 0) return false;
+    if (s1->size == 0 && s2->size == 0) return false;
+    if (s2->size == 0) return false;
+    if (s1->size == 0) return true;
     if (s1->size == 1 && s2->size == 1)
     {
         if (s1->first->elem == s2->first->elem) return true;
@@ -235,10 +234,11 @@ _Bool sset_subset(const IntSortedSetADT s1, const IntSortedSetADT s2)
 {
     if (s1 == NULL || s2 == NULL) return false;
     if (s1->size == 0) return false;
+    if (s2->size == 0) return false;
+    if (s1->size == 0) return true;
     if (s1->size >= s2->size) return false;
 
     ListNodePtr nodeS1 = s1->first;
-    ListNodePtr nodeS2 = s2->first;
     for (int i = 0; i < s1->size; i++)
     {
         if (!(sset_member(s2, nodeS1->elem))) return false;
@@ -334,7 +334,7 @@ IntSortedSetADT sset_subtraction(const IntSortedSetADT s1, const IntSortedSetADT
 
 _Bool sset_min(const IntSortedSetADT ss, int *ptr) 
 {
-    if (ss == NULL || *ptr == NULL) return false;
+    if (ss == NULL || ptr == NULL) return false;
     if (ss->size == 0) return false;
 
     *ptr = ss->first->elem;
@@ -343,7 +343,7 @@ _Bool sset_min(const IntSortedSetADT ss, int *ptr)
 
 _Bool sset_max(const IntSortedSetADT ss, int *ptr) 
 {
-    if (ss == NULL || *ptr == NULL) return false;
+    if (ss == NULL ||   ptr == NULL) return false;
     if (ss->size == 0) return false;
 
     *ptr = ss->last->elem;
