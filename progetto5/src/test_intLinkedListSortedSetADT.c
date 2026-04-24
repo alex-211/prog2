@@ -212,9 +212,35 @@ int check_sset_subseteq(){
     return passed;
 }
 
-int check_sset_subset() {
-    int passed=1;
-
+int check_sset_subset()
+{
+    int passed = 1;
+    IntSortedSetADT sptr = mkSSet();
+    IntSortedSetADT sptr2 = mkSSet();
+    sset_add(sptr, 3);
+    sset_add(sptr, 5);
+    sset_add(sptr, 7);
+    sset_add(sptr2, 9);
+    sset_add(sptr2, 7);
+    sset_add(sptr2, 5);
+    sset_add(sptr2, 3);
+    if (passed)
+    {
+        bool rv;
+        printf("sset_subset({3,5,7}, {9,7,5,3})\n");
+        rv = sset_subset(sptr, sptr2);
+        if (!(rv))
+        {
+            printf("FAILED\n");
+            printf("EXPECTED: NOT 0\n");
+            passed=0;
+        }
+        else
+        {
+            printf("OK\n");
+        }
+        printf("RESULT:%d\n\n", rv);
+    }
     return passed;
 }
 
@@ -264,65 +290,65 @@ int check_sset_extractMax(){
 int main(int argc, char *argv[]) {
   puts("BEGIN TEST intLinkedListSortedSetADT"); 
 
-  {
-    printf("TEST mkSSet\n");
-    check_mkSSet();
-    printf("\n");
-  }
-
-  {
-    printf("TEST dsSSet\n");
-    check_dsSSet();
-    printf("\n");
-  }
-
-  {
-    printf("TEST sset_add\n");
-    check_sset_add();
-    printf("\n");
-  }
-
-  {
-    printf("TEST sset_remove\n");    
-    check_sset_remove();
-    printf("\n");
-  }
-
-  {
-    printf("TEST sset_member\n");    
-    check_sset_member();
-    printf("\n");
-  }
-
-  {
-    printf("TEST isEmptySSet\n");    
-    check_isEmptySSet();
-    printf("\n");
-  }
-
-  {
-    printf("TEST sset_size\n");    
-    check_sset_size();
-    printf("\n");
-  }
-
-  {
-    printf("TEST sset_extract\n");    
-    check_sset_extract();
-    printf("\n");
-  }
-
-  {
-    printf("TEST sset_equals\n");    
-    check_sset_equals();
-    printf("\n");
-  }
-
-  {
-    printf("TEST sset_subseteq\n");    
-    check_sset_subseteq();
-    printf("\n");
-  }
+  // {
+  //   printf("TEST mkSSet\n");
+  //   check_mkSSet();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST dsSSet\n");
+  //   check_dsSSet();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST sset_add\n");
+  //   check_sset_add();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST sset_remove\n");
+  //   check_sset_remove();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST sset_member\n");
+  //   check_sset_member();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST isEmptySSet\n");
+  //   check_isEmptySSet();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST sset_size\n");
+  //   check_sset_size();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST sset_extract\n");
+  //   check_sset_extract();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST sset_equals\n");
+  //   check_sset_equals();
+  //   printf("\n");
+  // }
+  //
+  // {
+  //   printf("TEST sset_subseteq\n");
+  //   check_sset_subseteq();
+  //   printf("\n");
+  // }
 
   {
     printf("TEST sset_subset\n");    

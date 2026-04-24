@@ -1,2 +1,7 @@
 # ninja log v6
 1	47	1776780431685978614	CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o	87ecc48e03981c96
+1	87	1777024025894437492	CMakeFiles/progetto5.dir/src/intLinkedListSortedSetADT.c.o	eb405a4bad80755f
+1	39	1777024037977253039	CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o	87ecc48e03981c96
+39	62	1777024038015252459	progetto5	8c339d687e90e90
+1	30	1777024131167830416	CMakeFiles/progetto5.dir/src/test_intLinkedListSortedSetADT.c.o	87ecc48e03981c96
+31	47	1777024131197829958	progetto5	8c339d687e90e90

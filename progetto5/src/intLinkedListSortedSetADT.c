@@ -137,13 +137,14 @@ _Bool sset_remove(const IntSortedSetADT ss, const int elem)
 
 _Bool sset_member(const IntSortedSetADT ss, const int elem) 
 {
-    if (ss == NULL) return false;
+    if (ss == NULL || ss->size == 0) return false;
     if (ss->first->elem == elem) return true;
     if (ss->last->elem == elem) return true;
     ListNodePtr node = ss->first;
     for (int i = 0; i < ss->size; i++)
     {
         if (node->elem == elem) return true;
+        node = node->next;
     }
     return false;
 }
@@ -233,7 +234,6 @@ _Bool sset_subseteq(const IntSortedSetADT s1, const IntSortedSetADT s2)
 _Bool sset_subset(const IntSortedSetADT s1, const IntSortedSetADT s2) 
 {
     if (s1 == NULL || s2 == NULL) return false;
-    if (s1->size == 0) return false;
     if (s2->size == 0) return false;
     if (s1->size == 0) return true;
     if (s1->size >= s2->size) return false;
@@ -250,41 +250,36 @@ _Bool sset_subset(const IntSortedSetADT s1, const IntSortedSetADT s2)
 IntSortedSetADT sset_union(const IntSortedSetADT s1, const IntSortedSetADT s2) 
 {
     if (s1 == NULL || s2 == NULL) return NULL;
-    if (s1->size == 0 && s2->size == 0) return mkSSet();
-    if (s1->size == 0 && s2->size != 0) return s2; 
-    if (s1->size != 0 && s2->size == 0) return s1;
-    if (sset_subseteq(s1, s2)) return s2;
-    if (sset_subset(s2, s1)) return s1;
 
     IntSortedSetADT unionSet = mkSSet();
     if (unionSet == NULL) return NULL;
 
-    ListNodePtr nodeS1 = s1->first;
-    for (int i = 0; i < s1->size; i++)
+    if (s1->size != 0)
     {
-        sset_add(unionSet, nodeS1->elem);
-        nodeS1 = nodeS1->next;
+        ListNodePtr nodeS1 = s1->first;
+        for (int i = 0; i < s1->size; i++)
+        {
+            sset_add(unionSet, nodeS1->elem);
+            nodeS1 = nodeS1->next;
+        }
     }
-    ListNodePtr nodeS2 = s2->first;
-    for (int i = 0; i < s2->size; i++)
+
+    if (s2->size != 0)
     {
-        if (!(sset_member(unionSet, nodeS2->elem)))
+        ListNodePtr nodeS2 = s2->first;
+        for (int i = 0; i < s2->size; i++)
         {
             sset_add(unionSet, nodeS2->elem);
+            nodeS2 = nodeS2->next;
         }
-        nodeS2 = nodeS2->next;
     }
+
     return unionSet;
 }
 
 IntSortedSetADT sset_intersection(const IntSortedSetADT s1, const IntSortedSetADT s2) 
 {
     if (s1 == NULL || s2 == NULL) return NULL;
-    if (s1->size == 0 && s2->size == 0) return mkSSet();
-    if (s1->size == 0 && s2->size != 0) return s2; 
-    if (s1->size != 0 && s2->size == 0) return s1;
-    if (sset_subseteq(s1, s2)) return s1;
-    if (sset_subset(s2, s1)) return s2;
 
     IntSortedSetADT setInters = mkSSet();
     if (setInters == NULL) return NULL;
@@ -313,23 +308,25 @@ IntSortedSetADT sset_intersection(const IntSortedSetADT s1, const IntSortedSetAD
 
 IntSortedSetADT sset_subtraction(const IntSortedSetADT s1, const IntSortedSetADT s2) 
 {
-    // get the intersect of s1, s2, then remove all items of intersec from s1
     if (s1 == NULL || s2 == NULL) return NULL;
-    if (s1->size == 0 && s2->size == 0) return mkSSet();
     
     IntSortedSetADT subtract = mkSSet();
     if (subtract == NULL) return NULL;
 
-    IntSortedSetADT intersec = sset_intersection(s1, s2);
-    if (intersec == NULL) return NULL;
-
-    ListNodePtr node = intersec->first;
-    for (int i = 0; i < intersec->size; i++)
+    if (s1->size != 0)
     {
-        sset_remove(s1, node->elem);
-        node = node->next;
+        ListNodePtr node = s1->first;
+        for (int i = 0; i < s1->size; i++)
+        {
+            if (!(sset_member(s2, node->elem)))
+            {
+                sset_add(subtract, node->elem);
+            }
+            node = node->next;
+        }
     }
-    return NULL;   
+
+    return subtract;   
 }
 
 _Bool sset_min(const IntSortedSetADT ss, int *ptr) 
@@ -345,7 +342,6 @@ _Bool sset_max(const IntSortedSetADT ss, int *ptr)
 {
     if (ss == NULL ||   ptr == NULL) return false;
     if (ss->size == 0) return false;
-
     *ptr = ss->last->elem;
     return true;
 }
@@ -354,6 +350,7 @@ _Bool sset_extractMin(IntSortedSetADT ss, int *ptr)
 {
     int remVal;
     if (!(sset_min(ss, &remVal))) return false;
+    sset_remove(ss, remVal);
     *ptr = remVal;
     return true;
 }
@@ -363,5 +360,6 @@ _Bool sset_extractMax(IntSortedSetADT ss, int *ptr)
     int remVal;
     if (!(sset_max(ss, &remVal))) return false;
     *ptr = remVal;
+    sset_remove(ss, remVal);
     return true;       
 }
