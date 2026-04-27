@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "unity.h": "c"
+        "unity.h": "c",
+        "ram.h": "c",
+        "cstdlib": "c",
+        "stdbool.h": "c"
     }
 }
