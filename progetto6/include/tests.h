@@ -7,3 +7,7 @@
 void testInit(void);
 
 void testAlloc(void);
+
+void testDealloc(void);
+
+void testNumfree(void);

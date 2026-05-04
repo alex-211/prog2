@@ -41,3 +41,13 @@ void testAlloc(void)
     TEST_ASSERT_NOT_NULL(t->parent);
     TEST_ASSERT_NOT_NULL(r->lbuddy);
 }
+
+void testDealloc(void)
+{
+    return;
+}
+
+void testNumfree(void)
+{
+    return;
+}

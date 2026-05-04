@@ -37,27 +37,62 @@ RAM allocram(int K, RAM ram)
         else return NULL;
     }
 
-    if (K > nextNode->KB / 2) // THIS NEEDS TO BE A WHILE, FIX MEEE
+    RAM leftie;
+    RAM rightie;
+    while (K < nextNode->KB / 2)
     {
-        nextNode->parent->s = INTERNO;
-        nextNode->s = OCCUPATO;
-        return nextNode;
-    }
-    else 
-    {
-        RAM leftie = initram(nextNode->KB / 2);
-        RAM rightie = initram(nextNode->KB / 2);
+        nextNode->s = INTERNO;
+
+        leftie = initram(nextNode->KB / 2);
+        rightie = initram(nextNode->KB / 2);
 
         if (leftie == NULL || rightie == NULL) return NULL;
 
-        nextNode->s = INTERNO;
         nextNode->lbuddy = leftie;
         nextNode->rbuddy = rightie;
 
         leftie->parent = nextNode;
         rightie->parent = nextNode;
 
-        leftie->s = OCCUPATO;
-        return leftie;
+        nextNode = leftie;
     }
+        nextNode->s = OCCUPATO;
+        return nextNode;
+}
+
+Risultato deallocram(RAM ram)
+{
+    if (ram == NULL) return NOK;
+    if (ram->s == INTERNO) return NOK; //? credo
+
+    RAM rParent = ram->parent;
+
+    if (rParent->lbuddy == ram) rParent->lbuddy = NULL;
+    if (rParent->rbuddy == ram) rParent->rbuddy = NULL;
+
+    free(ram);
+    ram = NULL;
+
+    return OK;
+}
+
+int numfree(RAM ram)
+{
+    if (ram == NULL) return -1;
+    if (ram->s == LIBERO) return ram->KB;
+    if (ram->s == OCCUPATO) return 0;
+
+    int leftie = 0;
+    int rightie = 0;
+
+    if (ram->lbuddy != NULL)
+    {
+        leftie = numfree(ram->lbuddy);
+    }
+    if (ram->rbuddy != NULL);
+    {
+        rightie = numfree(ram->rbuddy);
+    }
+
+    return leftie + rightie;
 }
