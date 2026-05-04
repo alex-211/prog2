@@ -10,7 +10,7 @@ int main(void)
     UNITY_BEGIN();
     RUN_TEST(testInit);
     RUN_TEST(testAlloc);
-    //RUN_TEST(testDealloc);
+    RUN_TEST(testDealloc);
     //RUN_TEST(testNumfree);
     return UNITY_END();
 }

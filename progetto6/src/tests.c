@@ -46,21 +46,24 @@ void testDealloc(void)
 {
     RAM r = initram(64);
 
-    Risultato ris1 = deallocram(NULL);
-    TEST_ASSERT_EQUAL(NOK, ris1);
+    Risultato ris = deallocram(NULL);
+    TEST_ASSERT_EQUAL(NOK, ris);
 
     Risultato ris2 = deallocram(r);
     TEST_ASSERT_EQUAL(OK, ris2);
-    TEST_ASSERT_NULL(r);
+    TEST_ASSERT_EQUAL(LIBERO, r->s);
 
-    RAM r = initram(32);
-    allocram(16, r);
-    Risultato ris3 = dealloc(r->lbuddy);
+    RAM r2 = initram(32);
+    allocram(16, r); // failing to allocate the ram on the line, that's great!!
+    Risultato ris3 = deallocram(r2->lbuddy);
     TEST_ASSERT_EQUAL(OK, ris3);
-    TEST_ASSERT_NULL(r->lbuddy);
+    TEST_ASSERT_NULL(r2->lbuddy);
 
-    RAM r2 = initram(64);
-    // da finire lel, feed this thing a node where ->s == INTERNO
+    RAM r3 = initram(64);
+    allocram(16, r3);
+    Risultato ris4 = deallocram(r3->lbuddy);
+    TEST_ASSERT_EQUAL(NOK, ris4);
+    TEST_ASSERT_NOT_NULL(r3->lbuddy);
 }
 
 void testNumfree(void)

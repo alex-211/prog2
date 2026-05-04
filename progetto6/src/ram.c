@@ -13,6 +13,7 @@ RAM initram(int M)
         printf("initram failed to create ram node\n");
         return NULL;
     }
+    r->parent = NULL;
     r->KB = M;
     r->s = LIBERO;
     r->lbuddy = NULL;
@@ -39,7 +40,7 @@ RAM allocram(int K, RAM ram)
 
     RAM leftie;
     RAM rightie;
-    while (K < nextNode->KB / 2)
+    while (K <= nextNode->KB / 2)
     {
         nextNode->s = INTERNO;
 
@@ -66,13 +67,19 @@ Risultato deallocram(RAM ram)
     if (ram->s == INTERNO) return NOK; //? credo
 
     RAM rParent = ram->parent;
-
-    if (rParent->lbuddy == ram) rParent->lbuddy = NULL;
-    if (rParent->rbuddy == ram) rParent->rbuddy = NULL;
-
-    free(ram);
-    ram = NULL;
-
+    if (rParent != NULL)
+    {
+        if (rParent->lbuddy->s == LIBERO && rParent->rbuddy->s == LIBERO)
+        {
+            free(rParent->lbuddy);
+            rParent->lbuddy = NULL;
+            free(rParent->rbuddy);
+            rParent->rbuddy = NULL;
+            rParent->s = LIBERO;
+            return OK;
+        }
+    }
+    ram->s = LIBERO;
     return OK;
 }
 
