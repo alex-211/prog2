@@ -44,7 +44,23 @@ void testAlloc(void)
 
 void testDealloc(void)
 {
-    return;
+    RAM r = initram(64);
+
+    Risultato ris1 = deallocram(NULL);
+    TEST_ASSERT_EQUAL(NOK, ris1);
+
+    Risultato ris2 = deallocram(r);
+    TEST_ASSERT_EQUAL(OK, ris2);
+    TEST_ASSERT_NULL(r);
+
+    RAM r = initram(32);
+    allocram(16, r);
+    Risultato ris3 = dealloc(r->lbuddy);
+    TEST_ASSERT_EQUAL(OK, ris3);
+    TEST_ASSERT_NULL(r->lbuddy);
+
+    RAM r2 = initram(64);
+    // da finire lel, feed this thing a node where ->s == INTERNO
 }
 
 void testNumfree(void)
