@@ -11,3 +11,9 @@ void testAlloc(void);
 void testDealloc(void);
 
 void testNumfree(void);
+
+void testRam2str(void);
+
+void testStr2ram(void);
+
+void testFreeram(void);

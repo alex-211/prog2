@@ -12,5 +12,8 @@ int main(void)
     RUN_TEST(testAlloc);
     RUN_TEST(testDealloc);
     //RUN_TEST(testNumfree);
+    //RUN_TEST(testRam2str);
+    //RUN_TEST(testStr2ram);
+    //RUN_TEST(testFreeram);
     return UNITY_END();
 }

@@ -103,3 +103,56 @@ int numfree(RAM ram)
 
     return leftie + rightie;
 }
+
+char* ram2str(RAM ram)
+{
+    if (ram == NULL) return NULL;
+    char* string = malloc(696969);
+    if (string == NULL)
+    {
+        printf("ram2str failed to allocate memory for a string");
+        return NULL;
+    }
+
+    if (ram->s == LIBERO) snprintf(string, sizeof(string), "{%s%s,", string, "L");
+    if (ram->s == OCCUPATO) snprintf(string, sizeof(string), "{%s%s,", string, "O");
+    if (ram->s == INTERNO) snprintf(string, sizeof(string), "{%s%s,", string, "I");
+    snprintf(string, sizeof(string), "%s%d,", string, ram->KB);
+
+    if (ram->lbuddy == NULL) snprintf(string, sizeof(string), "%s[{%s},", string, "N");
+    else snprintf(string, sizeof(string), "%s[%s],", string, ram2str(ram->lbuddy));
+
+    if (ram->rbuddy == NULL) snprintf(string, sizeof(string), "%s{%s},", string, "N");
+    else snprintf(string, sizeof(string), "%s[%s],", string, ram2str(ram->rbuddy));
+
+    snprintf(string, sizeof(string), "%s}", string);
+
+    return string;
+}
+
+RAM str2ram(char *str)
+{
+    return NULL;
+}
+
+Risultato freeram(RAM* ramptr)
+{
+    if (ramptr == NULL || *ramptr == NULL) return NOK;
+    // mhh quanto adoro i puntatori a puntatori
+    RAM node = *ramptr;
+    if (node->s == LIBERO || node->s == OCCUPATO)
+    {
+        free(*ramptr);
+        *ramptr = NULL;
+    }
+
+    RAM lnode = node->lbuddy;
+    RAM rnode = node->rbuddy;
+
+    if (lnode != NULL) freeram(&lnode);
+
+    if (rnode != NULL) freeram(&rnode);
+
+    // quindi ha senso fare la ricorsione...
+    return OK;
+}

@@ -70,3 +70,19 @@ void testNumfree(void)
 {
     return;
 }
+
+void testRam2str(void)
+{
+    ram2str(NULL);
+    return;
+}
+
+void testStr2ram(void)
+{
+    return;
+}
+
+void testFreeram(void)
+{
+    return;
+}
