@@ -158,9 +158,65 @@ char* ram2str(RAM ram)
     return string;
 }
 
+RAM str2ram_rec(char *str, int i, RAM *parent)
+{
+    char *strKB;
+    int kb;
+    
+    while (str[i] != ',')
+    {
+        strKB = str[i];
+        i++;
+    }
+    kb = atoi(strKB);
+    RAM r = initram(kb);
+    if (r==NULL) return;
+
+    i++;
+
+    switch (str[i])
+    {
+    case 'I':
+        r->s = INTERNO;
+        break;
+
+    case 'O':
+        r->s = OCCUPATO;
+        break;
+
+    case 'L':
+        r->s = LIBERO;
+        break;
+    
+    default:
+        break;
+    }
+    i+=2;
+    
+    if (*parent != NULL)
+    r->parent = *parent;
+
+    while (str[i] != '{') i++;
+    i++;
+
+    if (str[i] != 'N')
+    {
+        r->lbuddy = str2ram_rec(str, i, r);
+    }
+    i+=3;
+    if (str[i] != 'N')
+    {
+        r->rbuddy = str2ram_rec(str, i, r);
+    }
+    return r;
+}
+
 RAM str2ram(char *str)
 {
-    return NULL;
+    if (str == "{N}" || str == NULL) return NULL;
+    RAM ram;
+    str2ram_rec(*str, 1, &ram);
+    return ram;
 }
 
 Risultato freeram(RAM* ramptr)
