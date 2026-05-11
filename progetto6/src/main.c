@@ -5,8 +5,22 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+void debugRam2str(void)
+{
+    puts("Begin debug ram2str() fct");
+    RAM r = initram(64);
+
+    RAM rNode1 = allocram(16, r);
+    RAM rNode2 = allocram(29, r);
+
+    char* string = ram2str(r);
+    printf("\nFINAL OUTPUT %s\n\n", string);
+    return;
+}
+
 int main(void)
 {
+    debugRam2str();
     UNITY_BEGIN();
     RUN_TEST(testInit);
     RUN_TEST(testAlloc);

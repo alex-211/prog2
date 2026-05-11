@@ -31,7 +31,6 @@
       <change beforePath="$PROJECT_DIR$/bin/progetto6" beforeDir="false" afterPath="$PROJECT_DIR$/bin/progetto6" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ram.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ram.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +41,7 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="25" />
+    <option name="cachedIndexableFilesCount" value="28" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
@@ -114,6 +113,7 @@
       <updated>1777284289670</updated>
       <workItem from="1777284291243" duration="1464000" />
       <workItem from="1777904408471" duration="2163000" />
+      <workItem from="1778071306604" duration="192000" />
     </task>
     <servers />
   </component>
@@ -129,9 +129,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/tests.c</url>
-          <line>46</line>
-          <option name="timeStamp" value="4" />
+          <url>file://$PROJECT_DIR$/src/ram.c</url>
+          <line>108</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

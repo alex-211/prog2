@@ -1,6 +1,22 @@
 #include "../include/ram.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+
+int ramCounter(RAM ram)
+{
+    if (ram == NULL) return 0;
+    if (ram->s == LIBERO || ram->s == OCCUPATO) return 1;
+
+    int lefties = 0;
+    int righties = 0;
+    RAM leftNode = ram->lbuddy;
+    RAM rightNode = ram->rbuddy;
+
+    if (leftNode) lefties = ramCounter(leftNode);
+    if (rightNode) righties = ramCounter(rightNode);
+    return lefties + righties;
+}
 
 RAM initram(int M)
 {
@@ -96,7 +112,7 @@ int numfree(RAM ram)
     {
         leftie = numfree(ram->lbuddy);
     }
-    if (ram->rbuddy != NULL);
+    if (ram->rbuddy != NULL)
     {
         rightie = numfree(ram->rbuddy);
     }
@@ -104,29 +120,41 @@ int numfree(RAM ram)
     return leftie + rightie;
 }
 
+void ram2str_rec(char* string, RAM ram)
+{
+    char *s;
+    char kb[10];
+    if (ram->s == LIBERO) s = "{L,";
+    if (ram->s == OCCUPATO) s = "{O,";
+    else s = "{I,";
+    
+    snprintf(kb, 10, "%d,[", ram->KB);
+    strcat(string, s);
+    strcat(string, kb);
+
+    strcat(string, "[");
+    if (ram->lbuddy) ram2str_rec(string, ram->lbuddy);
+    else strcat(string, "{N},");
+    strcat(string, ",");
+
+    if (ram->rbuddy) ram2str_rec(string, ram->rbuddy);
+    else strcat(string, "{N}");
+    strcat(string, "]");
+}
+
 char* ram2str(RAM ram)
 {
     if (ram == NULL) return NULL;
-    char* string = malloc(696969);
-    if (string == NULL)
+    // let's be efficient and count the nodes
+    int nodes = ramCounter(ram);
+    char* string = malloc(nodes*10 + 1);
+
+    if (nodes == 0)
     {
-        printf("ram2str failed to allocate memory for a string");
-        return NULL;
-    }
-
-    if (ram->s == LIBERO) snprintf(string, sizeof(string), "{%s%s,", string, "L");
-    if (ram->s == OCCUPATO) snprintf(string, sizeof(string), "{%s%s,", string, "O");
-    if (ram->s == INTERNO) snprintf(string, sizeof(string), "{%s%s,", string, "I");
-    snprintf(string, sizeof(string), "%s%d,", string, ram->KB);
-
-    if (ram->lbuddy == NULL) snprintf(string, sizeof(string), "%s[{%s},", string, "N");
-    else snprintf(string, sizeof(string), "%s[%s],", string, ram2str(ram->lbuddy));
-
-    if (ram->rbuddy == NULL) snprintf(string, sizeof(string), "%s{%s},", string, "N");
-    else snprintf(string, sizeof(string), "%s[%s],", string, ram2str(ram->rbuddy));
-
-    snprintf(string, sizeof(string), "%s}", string);
-
+        string = "";
+        return string;
+    } 
+    ram2str_rec(string, ram);
     return string;
 }
 
