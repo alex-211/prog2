@@ -6,26 +6,38 @@
 int ramCounter(RAM ram)
 {
     if (ram == NULL) return 0;
-    if (ram->s == LIBERO || ram->s == OCCUPATO) return 1;
+    return 1 + ramCounter(ram->lbuddy) + ramCounter(ram->rbuddy);
+}
 
-    int lefties = 0;
-    int righties = 0;
-    RAM leftNode = ram->lbuddy;
-    RAM rightNode = ram->rbuddy;
+RAM initram_internal(int M) 
+{
+    if (M < 1) return NULL;
+    if ((M & (M-1)) != 0) return NULL; // "se non è una potenza di 2"
 
-    if (leftNode) lefties = ramCounter(leftNode);
-    if (rightNode) righties = ramCounter(rightNode);
-    return lefties + righties;
+    RAM r = malloc(sizeof(struct nodo));
+    if (r == NULL)
+    {
+        printf("initram failed to create ram node\n");
+        return NULL;
+    }
+    r->parent = NULL;
+    r->KB = M;
+    r->s = LIBERO;
+    r->lbuddy = NULL;
+    r->rbuddy = NULL;
+
+    return r;
 }
 
 RAM initram(int M)
 {
-    if (M <= 1) return NULL;
+    if (M == 1) return NULL;
     if ((M & (M-1)) != 0) return NULL; // "se non è una potenza di 2"
 
     RAM r = malloc(sizeof(*r));
     if (r == NULL)
     {
+        free(r);
         printf("initram failed to create ram node\n");
         return NULL;
     }
@@ -43,38 +55,29 @@ RAM allocram(int K, RAM ram)
     if (ram == NULL) return NULL;
     if (K<=0) return NULL;
     if (K > ram->KB) return NULL;
+    if (ram->s == OCCUPATO) return NULL;
 
-    RAM nextNode = ram;
-    while (nextNode->s != LIBERO)
+    if (ram->s == INTERNO)
     {
-        if (nextNode->s == OCCUPATO) return NULL;
-
-        if (nextNode->lbuddy->s == LIBERO) nextNode = nextNode->lbuddy;
-        else if (nextNode->rbuddy->s == LIBERO) nextNode = nextNode->rbuddy;
-        else return NULL;
+        RAM ris = allocram(K, ram->lbuddy);
+        if (ris) return ris;
+        ris = allocram(K, ram->rbuddy);
+        return ris;
     }
 
-    RAM leftie;
-    RAM rightie;
-    while (K <= nextNode->KB / 2)
+    if (K > ram->KB / 2)
     {
-        nextNode->s = INTERNO;
-
-        leftie = initram(nextNode->KB / 2);
-        rightie = initram(nextNode->KB / 2);
-
-        if (leftie == NULL || rightie == NULL) return NULL;
-
-        nextNode->lbuddy = leftie;
-        nextNode->rbuddy = rightie;
-
-        leftie->parent = nextNode;
-        rightie->parent = nextNode;
-
-        nextNode = leftie;
+        ram->s = OCCUPATO;
+        return ram;
     }
-        nextNode->s = OCCUPATO;
-        return nextNode;
+    RAM left = initram(ram->KB / 2);
+    RAM right = initram(ram->KB / 2);
+    left->parent = ram;
+    right->parent = ram;
+    ram->rbuddy = right;
+    ram->lbuddy = left;
+
+    return allocram(K, left);
 }
 
 Risultato deallocram(RAM ram)
@@ -122,101 +125,94 @@ int numfree(RAM ram)
 
 void ram2str_rec(char* string, RAM ram)
 {
+    if (ram == NULL) {
+        strcat(string, "{N}");
+        return;
+    }
+
+    char kb[20];
     char *s;
-    char kb[10];
-    if (ram->s == LIBERO) s = "{L,";
-    if (ram->s == OCCUPATO) s = "{O,";
-    else s = "{I,";
+    if (ram->s == LIBERO) s = "L";
+    else if (ram->s == OCCUPATO) s = "O";
+    else s = "I";
     
-    snprintf(kb, 10, "%d,[", ram->KB);
-    strcat(string, s);
+    snprintf(kb, 20, "{%d,%s,[", ram->KB, s);
     strcat(string, kb);
 
-    strcat(string, "[");
-    if (ram->lbuddy) ram2str_rec(string, ram->lbuddy);
-    else strcat(string, "{N},");
+    ram2str_rec(string, ram->lbuddy);
     strcat(string, ",");
-
-    if (ram->rbuddy) ram2str_rec(string, ram->rbuddy);
-    else strcat(string, "{N}");
-    strcat(string, "]");
+    ram2str_rec(string, ram->rbuddy);
+    
+    strcat(string, "]}");
 }
 
 char* ram2str(RAM ram)
 {
     if (ram == NULL) return NULL;
-    // let's be efficient and count the nodes
     int nodes = ramCounter(ram);
-    char* string = malloc(nodes*10 + 1);
+    char* string = malloc(nodes * 40 + 1);
+    if (string == NULL) return NULL;
 
-    if (nodes == 0)
-    {
-        string = "";
-        return string;
-    } 
+    string[0] = '\0';
     ram2str_rec(string, ram);
     return string;
 }
 
-RAM str2ram_rec(char *str, int i, RAM *parent)
+RAM str2ram_rec(char **ptr, RAM parent)
 {
-    char *strKB;
-    int kb;
-    
-    while (str[i] != ',')
-    {
-        strKB = str[i];
-        i++;
+    char *s = *ptr;
+    if (strncmp(s, "{N}", 3) == 0) {
+        *ptr += 3;
+        return NULL;
     }
-    kb = atoi(strKB);
-    RAM r = initram(kb);
-    if (r==NULL) return;
 
-    i++;
+    if (*s != '{') return NULL;
+    s++;
 
-    switch (str[i])
-    {
-    case 'I':
-        r->s = INTERNO;
-        break;
+    int kb = atoi(s);
+    while (*s >= '0' && *s <= '9') s++;
+    if (*s != ',') return NULL;
+    s++;
 
-    case 'O':
-        r->s = OCCUPATO;
-        break;
+    Stato stato;
+    if (*s == 'L') stato = LIBERO;
+    else if (*s == 'O') stato = OCCUPATO;
+    else if (*s == 'I') stato = INTERNO;
+    else return NULL;
+    s++; 
+    if (*s != ',') return NULL;
+    s++; 
+    if (*s != '[') return NULL;
+    s++;
 
-    case 'L':
-        r->s = LIBERO;
-        break;
-    
-    default:
-        break;
-    }
-    i+=2;
-    
-    if (*parent != NULL)
-    r->parent = *parent;
+    RAM r = initram_internal(kb);
+    if (r == NULL) return NULL;
+    r->s = stato;
+    r->parent = parent;
 
-    while (str[i] != '{') i++;
-    i++;
+    *ptr = s;
+    r->lbuddy = str2ram_rec(ptr, r);
+    s = *ptr;
+    if (*s != ',') return NULL;
+    s++; 
+    *ptr = s;
+    r->rbuddy = str2ram_rec(ptr, r);
+    s = *ptr;
 
-    if (str[i] != 'N')
-    {
-        r->lbuddy = str2ram_rec(str, i, r);
-    }
-    i+=3;
-    if (str[i] != 'N')
-    {
-        r->rbuddy = str2ram_rec(str, i, r);
-    }
+    if (*s != ']') return NULL;
+    s++; 
+    if (*s != '}') return NULL;
+    s++; 
+
+    *ptr = s;
     return r;
 }
 
 RAM str2ram(char *str)
 {
-    if (str == "{N}" || str == NULL) return NULL;
-    RAM ram;
-    str2ram_rec(*str, 1, &ram);
-    return ram;
+    if (str == NULL || strlen(str) == 0 || strcmp(str, "{N}") == 0) return NULL;
+    char *ptr = str;
+    return str2ram_rec(&ptr, NULL);
 }
 
 Risultato freeram(RAM* ramptr)
