@@ -76,6 +76,7 @@ RAM allocram(int K, RAM ram)
     right->parent = ram;
     ram->rbuddy = right;
     ram->lbuddy = left;
+    ram->s = INTERNO;
 
     return allocram(K, left);
 }
@@ -83,11 +84,13 @@ RAM allocram(int K, RAM ram)
 Risultato deallocram(RAM ram)
 {
     if (ram == NULL) return NOK;
-    if (ram->s == INTERNO) return NOK; //? credo
+    if (ram->s != OCCUPATO) return NOK; //? credo
 
-    RAM rParent = ram->parent;
-    if (rParent != NULL)
+    RAM currentNode = ram;
+    ram->s = LIBERO;
+    while (currentNode->parent != NULL)
     {
+        RAM rParent = currentNode->parent;
         if (rParent->lbuddy->s == LIBERO && rParent->rbuddy->s == LIBERO)
         {
             free(rParent->lbuddy);
@@ -95,10 +98,11 @@ Risultato deallocram(RAM ram)
             free(rParent->rbuddy);
             rParent->rbuddy = NULL;
             rParent->s = LIBERO;
-            return OK;
+            currentNode = rParent;
         }
+        else break;
+        
     }
-    ram->s = LIBERO;
     return OK;
 }
 
