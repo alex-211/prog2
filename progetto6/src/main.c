@@ -10,8 +10,8 @@ void debugRam2str(void)
     puts("Begin debug ram2str() fct");
     RAM r = initram(64);
 
-    RAM rNode1 = allocram(16, r);
-    RAM rNode2 = allocram(29, r);
+    allocram(16, r);
+    allocram(29, r);
 
     char* string = ram2str(r);
     printf("\nFINAL OUTPUT %s\n\n", string);
@@ -25,9 +25,9 @@ int main(void)
     RUN_TEST(testInit);
     RUN_TEST(testAlloc);
     RUN_TEST(testDealloc);
-    //RUN_TEST(testNumfree);
-    //RUN_TEST(testRam2str);
-    //RUN_TEST(testStr2ram);
-    //RUN_TEST(testFreeram);
+    RUN_TEST(testNumfree);
+    RUN_TEST(testRam2str);
+    RUN_TEST(testStr2ram);
+    RUN_TEST(testFreeram);
     return UNITY_END();
 }

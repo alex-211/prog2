@@ -31,13 +31,12 @@ RAM initram_internal(int M)
 
 RAM initram(int M)
 {
-    if (M == 1) return NULL;
+    if (M < 2) return NULL;
     if ((M & (M-1)) != 0) return NULL; // "se non è una potenza di 2"
 
-    RAM r = malloc(sizeof(*r));
+    RAM r = malloc(sizeof(struct nodo));
     if (r == NULL)
     {
-        free(r);
         printf("initram failed to create ram node\n");
         return NULL;
     }
@@ -53,7 +52,7 @@ RAM initram(int M)
 RAM allocram(int K, RAM ram)
 {
     if (ram == NULL) return NULL;
-    if (K<=0) return NULL;
+    if (K <= 0) return NULL;
     if (K > ram->KB) return NULL;
     if (ram->s == OCCUPATO) return NULL;
 
@@ -70,8 +69,9 @@ RAM allocram(int K, RAM ram)
         ram->s = OCCUPATO;
         return ram;
     }
-    RAM left = initram(ram->KB / 2);
-    RAM right = initram(ram->KB / 2);
+    RAM left = initram_internal(ram->KB / 2);
+    RAM right = initram_internal(ram->KB / 2);
+    if (left == NULL || right == NULL) return NULL;
     left->parent = ram;
     right->parent = ram;
     ram->rbuddy = right;
@@ -84,24 +84,22 @@ RAM allocram(int K, RAM ram)
 Risultato deallocram(RAM ram)
 {
     if (ram == NULL) return NOK;
-    if (ram->s != OCCUPATO) return NOK; //? credo
+    if (ram->s == LIBERO) return OK;
+    if (ram->s != OCCUPATO) return NOK;
 
     RAM currentNode = ram;
-    ram->s = LIBERO;
+    currentNode->s = LIBERO;
     while (currentNode->parent != NULL)
     {
         RAM rParent = currentNode->parent;
         if (rParent->lbuddy->s == LIBERO && rParent->rbuddy->s == LIBERO)
         {
-            free(rParent->lbuddy);
-            rParent->lbuddy = NULL;
-            free(rParent->rbuddy);
-            rParent->rbuddy = NULL;
+            freeram(&(rParent->lbuddy));
+            freeram(&(rParent->rbuddy));
             rParent->s = LIBERO;
             currentNode = rParent;
         }
         else break;
-        
     }
     return OK;
 }
@@ -222,21 +220,11 @@ RAM str2ram(char *str)
 Risultato freeram(RAM* ramptr)
 {
     if (ramptr == NULL || *ramptr == NULL) return NOK;
-    // mhh quanto adoro i puntatori a puntatori
-    RAM node = *ramptr;
-    if (node->s == LIBERO || node->s == OCCUPATO)
-    {
-        free(*ramptr);
-        *ramptr = NULL;
-    }
 
-    RAM lnode = node->lbuddy;
-    RAM rnode = node->rbuddy;
+    if ((*ramptr)->lbuddy != NULL) freeram((&(*ramptr)->lbuddy));
+    if ((*ramptr)->rbuddy != NULL) freeram((&(*ramptr)->rbuddy));
 
-    if (lnode != NULL) freeram(&lnode);
-
-    if (rnode != NULL) freeram(&rnode);
-
-    // quindi ha senso fare la ricorsione...
+    free(*ramptr);
+    *ramptr = NULL;
     return OK;
 }
