@@ -152,7 +152,7 @@ char* ram2str(RAM ram)
 {
     if (ram == NULL) return NULL;
     int nodes = ramCounter(ram);
-    char* string = malloc(nodes * 40 + 1);
+    char* string = malloc(nodes * 40 + (nodes + 1) * 3 + 1);
     if (string == NULL) return NULL;
 
     string[0] = '\0';
