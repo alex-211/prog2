@@ -1,0 +1,338 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+#include "contact.h"
+
+/* INSERIRE QUI EVENTUALI ALTRI #include <...> */
+/* INSERT HERE MORE #include <...> IF NEEDED */
+
+/* INSERIRE QUI EVENTUALI FUNZIONI AUSILIARIE */
+/* INSERT HERE AUXILIARY FUNCTIONS IF NEEDED */
+
+/**
+
+ * @brief Controlla se due contatti hanno lo stesso nome e cognome.
+ *
+ * Restituisce:
+ * - 1 se i due contatti sono uguali, 0 se sono diversi, -99 se qualche name o surname è NULL
+ *
+ * @param c1 primo contatto.
+ * @param c2 secondo contatto.
+ * @return  1, 0, o -99.
+ *
+ * <ENGLISH VERSION>
+ *
+ * @brief Checks is two contacts have same name and surname.
+ *
+ * Returns:
+ * - 1 if the contacts are equal, 0 is they are different, -99 is some name o surname is NULL
+ *
+ * @param c1 first contact.
+ * @param c2 second contact.
+ * @return  1, 0, o -99 (see above).
+ */
+
+int contactEq(Contact c1, Contact c2) 
+{
+
+    if (c1.name == NULL || c1.surname == NULL || c2.name == NULL || c2.surname == NULL) 
+    {
+        return -99;
+    }
+    if (strcmp(c1.name, c2.name) == 0 && strcmp(c1.surname, c2.surname) == 0) 
+    {
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * Invoca la funzione contactEq su uno o più casi a scelta, controllando che
+ * il suo effetto come risultato e argomenti rispetti la specifica corretta.
+ * Può essere sufficiente anche un unico caso, se sufficientemente generale per
+ * individuare quali programmi sono corretti e quali no.
+ * Se la funzione è corretta, come ultima cosa deve stampare "TEST PASSED\n".
+ * Se invece la funzione non risulta corretta, deve stampare "TEST FAILED\n".
+ *
+ * NOTA: questa funzione compare negli errori di compilazione come "student_main"
+ *
+ * <ENGLISH VERSION>
+ *
+ * Invokes the contactEq function on one or more selected test cases, checking
+ * that its effect as result and arguments respects the correct specification.
+ * A single test case may be enough, if it sufficiently general to single out
+ * which programs are correct and which are not.
+ * If the function is correct, as the final step it must print "TEST PASSED\n".
+ * If instead the function is not correct, it must print "TEST FAILED\n".
+ *
+ * NOTE: this function appears in compilation errors as "student_main"
+ */
+
+int test_contactEq() 
+{
+    Contact c1, c2;
+    
+    // null case
+    c1.name = NULL;
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactEq(c1, c2) != -99) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // different case
+    c1.name = "Luigi";
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactEq(c1, c2) != 0) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // equals case
+    c1.name = "Mario";
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactEq(c1, c2) != 1) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    printf("TEST PASSED\n");
+    return 0;
+}
+
+// come per contactEq
+// same as for contactEq
+int contactEqEff(const Contact *pc1, const Contact *pc2) 
+{
+    if (pc1 == NULL || pc2 == NULL) return -99;
+    if (pc1->name == NULL || pc1->surname == NULL || pc2->name == NULL || pc2->surname == NULL) return -99;
+    if (strcmp(pc1->name, pc2->name) == 0 && strcmp(pc1->surname, pc2->surname) == 0) {
+        return 1;
+    }
+    return 0;
+}
+
+// come per test_contactEq
+// same as for test_contactEq
+int test_contactEqEff() 
+{
+    Contact c1, c2;
+    
+    // NULL pointer case
+    if (contactEqEff(NULL, &c2) != -99) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // NULL field case
+    c1.name = NULL;
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactEqEff(&c1, &c2) != -99) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // Different case
+    c1.name = "Luigi";
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactEqEff(&c1, &c2) != 0) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // Equal case
+    c1.name = "Mario";
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactEqEff(&c1, &c2) != 1) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    printf("TEST PASSED\n");
+    return 0;
+}
+
+// come per contactEq
+// same as for contactEq
+int contactCmp(Contact c1, Contact c2) 
+{
+    if (c1.name == NULL || c1.surname == NULL || c2.name == NULL || c2.surname == NULL) return -99;
+    int cmp_surname = strcmp(c1.surname, c2.surname);
+    if (cmp_surname < 0) return -1;
+    if (cmp_surname > 0) return 1;
+    int cmp_name = strcmp(c1.name, c2.name);
+    if (cmp_name < 0) return -1;
+    if (cmp_name > 0) return 1;
+    return 0;
+}
+
+// come per test_contactEq
+// same as for test_contactEq
+int test_contactCmp() 
+{
+    Contact c1, c2;
+    
+    // NULL field case
+    c1.name = NULL;
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactCmp(c1, c2) != -99) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // Surname smaller
+    c1.name = "Mario";
+    c1.surname = "Bianchi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactCmp(c1, c2) != -1) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // Surname larger
+    c1.name = "Mario";
+    c1.surname = "Verdi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactCmp(c1, c2) != 1) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // Surnames equal, Name smaller
+    c1.name = "Andrea";
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactCmp(c1, c2) != -1) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+    
+    // Surnames equal, Name larger
+    c1.name = "Zeno";
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactCmp(c1, c2) != 1) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // Equal
+    c1.name = "Mario";
+    c1.surname = "Rossi";
+    c2.name = "Mario";
+    c2.surname = "Rossi";
+    if (contactCmp(c1, c2) != 0) {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    printf("TEST PASSED\n");
+    return 0;
+}
+
+// come per test_contactEq
+// same as for test_contactEq
+int contactCmpEff(const Contact *pc1, const Contact *pc2) 
+{
+    if (pc1 == NULL || pc2 == NULL) return -99;
+    if (pc1->name == NULL || pc1->surname == NULL || pc2->name == NULL || pc2->surname == NULL) return -99;
+    int cmp_surname = strcmp(pc1->surname, pc2->surname);
+    if (cmp_surname < 0) return -1;
+    if (cmp_surname > 0) return 1;
+    int cmp_name = strcmp(pc1->name, pc2->name);
+    if (cmp_name < 0) return -1;
+    if (cmp_name > 0) return 1;
+    return 0;
+
+}
+
+// come per test_contactEq
+// same as for test_contactEq
+int test_contactCmpEff() 
+{
+
+    Contact c1, c2;
+    Contact *pc1 = &c1;
+    Contact *pc2 = &c2;
+
+    // caso null
+    if (contactCmpEff(NULL, NULL) != -99)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso diversi c1 < c2
+    c1.surname = "Testaquadra";
+    c2.surname = "Squared";
+    if (contactCmpEff(pc1, pc2) != 1)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso diversi c2 < c1
+    c2.surname = "Testaquadra";
+    c1.surname = "Squared";
+    if (contactCmpEff(pc1, pc2) != 2)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso stesso cognome
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "Jacob";
+    c2.surname = "Squared";
+    if (contactCmpEff(pc1, pc2) != 1)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso uguali
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "Giacomo";
+    c2.surname = "Squared";
+    if (contactCmpEff(pc1, pc2) != 0)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    // caso diversi ma uno maiusc
+    c1.name = "Giacomo";
+    c1.surname = "Squared";
+    c2.name = "GIACOMO";
+    c2.surname = "SQUARED";
+    if (contactCmpEff(pc1, pc2) != 0)
+    {
+        printf("TEST FAILED\n");
+        return 0;
+    }
+
+    printf("TEST PASSED\n");
+    return 0;
+
+}
